@@ -50,17 +50,18 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /var/www/html/myLaravel # navigate to your project directory
+            sudo git config --global --add safe.directory /var/www/html/myLaravel
             sudo git stash
             sudo git fetch --all
             sudo git pull origin main
 
-            composer install --prefer-dist --no-progress --no-suggest --optimize-autoloader
+            sudo chown -R www-data:www-data /var/www/html/myLaravel
+            sudo chmod -R 755 /var/www/html/myLaravel
+
+            composer install --prefer-dist --no-progress --optimize-autoloader
             php artisan migrate --force
             php artisan config:cache
             php artisan route:cache
             php artisan view:cache
-
-            sudo chown -R www-data:www-data /var/www/html/myLaravel
-            sudo chmod -R 755 /var/www/html/myLaravel
 
             sudo systemctl restart nginx
