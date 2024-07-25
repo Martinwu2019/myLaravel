@@ -30,14 +30,6 @@ jobs:
       - name: Install Composer dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-      # {5} Run Laravel specific commands
-      - name: Run Laravel Commands
-        run: |
-          php artisan migrate --force
-          php artisan config:cache
-          php artisan route:cache
-          php artisan view:cache
-
       # {6} Set Directory Permissions
       - name: Directory Permissions
         run: chmod -R 777 storage bootstrap/cache
@@ -61,6 +53,12 @@ jobs:
             sudo git stash
             sudo git fetch --all
             sudo git pull origin main
+
+            composer install --prefer-dist --no-progress --no-suggest --optimize-autoloader
+            php artisan migrate --force
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
 
             sudo chown -R www-data:www-data /var/www/html/myLaravel
             sudo chmod -R 755 /var/www/html/myLaravel
