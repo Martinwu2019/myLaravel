@@ -33,7 +33,6 @@ jobs:
       # {5} Run Laravel specific commands
       - name: Run Laravel Commands
         run: |
-          # php artisan key:generate # should only be running once.
           php artisan migrate --force
           php artisan config:cache
           php artisan route:cache
