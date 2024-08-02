@@ -60,8 +60,12 @@ jobs:
 
             composer install --prefer-dist --no-progress --optimize-autoloader
 
-            # Set the API key as an environment variable
+            # Set the API key as an environment variable temporarily for the current session
             export OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
+
+            # Add the API key to the .env file
+            echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> .env
+
 
             php artisan migrate --force
             php artisan config:cache
