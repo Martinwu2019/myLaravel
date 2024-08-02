@@ -39,7 +39,9 @@ jobs:
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-        
+        env:
+            OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
       # {8} Deploy to server using SSH
       - name: executing remote ssh commands using key
         uses: appleboy/ssh-action@master
@@ -61,10 +63,10 @@ jobs:
             composer install --prefer-dist --no-progress --optimize-autoloader
 
             # Set the API key as an environment variable temporarily for the current session
-            export OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
+            # export OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
 
             # Add the API key to the .env file
-            echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> /var/www/html/myLaravel/.env
+            # echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> /var/www/html/myLaravel/.env
 
 
             php artisan migrate --force
@@ -73,11 +75,11 @@ jobs:
             php artisan view:cache
 
             sudo systemctl restart nginx
-            
-      # Optional: Verify the .env file and the environment variable
-      - name: Verify .env file
-        run: cat /var/www/html/myLaravel/.env
 
-      - name: Verify Environment Variable
-        run: printenv | grep OPENAI_API_KEY
+      # Optional: Verify the .env file and the environment variable
+      # - name: Verify .env file
+      #   run: cat /var/www/html/myLaravel/.env
+
+      # - name: Verify Environment Variable
+      #   run: printenv | grep OPENAI_API_KEY
 
