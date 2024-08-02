@@ -64,7 +64,7 @@ jobs:
             export OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
 
             # Add the API key to the .env file
-            echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> .env
+            echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> /var/www/html/myLaravel/.env
 
 
             php artisan migrate --force
@@ -73,3 +73,11 @@ jobs:
             php artisan view:cache
 
             sudo systemctl restart nginx
+            
+      # Optional: Verify the .env file and the environment variable
+      - name: Verify .env file
+        run: cat /var/www/html/myLaravel/.env
+
+      - name: Verify Environment Variable
+        run: printenv | grep OPENAI_API_KEY
+
